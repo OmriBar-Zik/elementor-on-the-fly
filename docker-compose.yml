@@ -1,0 +1,35 @@
+version: '3.1'
+
+services:
+
+  wordpress:
+    image: wordpress
+    ports:
+      - 4000:80
+    environment:
+      WORDPRESS_DB_PASSWORD: example
+    volumes:
+      - wordpress:/var/www/html
+      - ./wp-content/themes/my-theme:/var/www/html/wp-content/themes/my-theme
+      - ./wp-content/plugins:/var/www/html/wp-content/plugins
+      - ./wp-content/uploads:/var/www/html/wp-content/uploads
+
+  cli:
+    image: wordpress:cli
+    depends_on:
+      - wordpress
+    volumes:
+      - wordpress:/var/www/html
+      - ./wp-content/themes/my-theme:/var/www/html/wp-content/themes/my-theme
+      - ./wp-content/plugins:/var/www/html/wp-content/plugins
+      - ./wp-content/uploads:/var/www/html/wp-content/uploads
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    volumes:
+      - ./database:/var/lib/mysql
+
+volumes:
+  wordpress:
